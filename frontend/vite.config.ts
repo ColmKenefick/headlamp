@@ -32,6 +32,10 @@ export default defineConfig({
         target: 'http://localhost:4466',
         changeOrigin: true,
       },
+      '/externalproxy': {
+        target: 'http://localhost:4466',
+        changeOrigin: true,
+      },
     },
     cors: true,
   },
