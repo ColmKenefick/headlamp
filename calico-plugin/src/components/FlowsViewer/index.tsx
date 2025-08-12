@@ -14,13 +14,14 @@ import {
 import { Icon } from '@iconify/react';
 import { useFlows } from '../../api/queries';
 import { FlowLog } from '../../types';
-import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { TableCell } from '@mui/material';
 import { TableHead, TableRow } from '@mui/material';
 import { IconButton } from '@mui/material';
 import { TableBody } from '@mui/material';
 import { Collapse } from '@mui/material';
 import { LinearProgress } from '@mui/material';
+import { Tooltip } from '@mui/material';
 
 const FlowsViewer = () => {
   const [openRow, setOpenRow] = React.useState<number | null>(null);
@@ -43,8 +44,36 @@ const FlowsViewer = () => {
         accessorKey: 'action',
         header: 'action',
         cell: info => {
-          console.log('action cell:', info);
-          return info.getValue();
+          const value = info.getValue();
+          const row = info.row.original;
+          const color = value === 'Deny' ? '#f1403e' : value === 'Allow' ? '#33d28d' : '#5F5F5F';
+          return (
+            <Tooltip
+              title={
+                <pre style={{ margin: 0 }}>
+                  {row.policies?.enforced?.[0]?.name && row.policies.enforced[0].name !== ''
+                    ? JSON.stringify(row.policies.enforced[0].name, null, 2)
+                    : JSON.stringify('default.deny', null, 2)}
+                </pre>
+              }
+              placement="top"
+              arrow
+            >
+              <Box component="span" display="flex" alignItems="center" gap={1}>
+                <Box
+                  component="span"
+                  sx={{
+                    width: 10,
+                    height: 10,
+                    borderRadius: '50%',
+                    backgroundColor: color,
+                    display: 'inline-block',
+                  }}
+                />
+                {value}
+              </Box>
+            </Tooltip>
+          );
         },
       },
       {
@@ -78,7 +107,7 @@ const FlowsViewer = () => {
         cell: info => info.getValue(),
       },
     ],
-    []
+    [flowsData]
   );
 
   const data = Array.isArray(flowsData)
@@ -92,8 +121,6 @@ const FlowsViewer = () => {
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
-
-  //   console.log('Render state:', { flows, loading, error }, columns);
 
   return (
     <SectionBox paddingTop={2} marginTop={2}>
@@ -161,7 +188,9 @@ const FlowsViewer = () => {
                         </IconButton>
                       </TableCell>
                       {row.getVisibleCells().map(cell => (
-                        <TableCell key={cell.id}>{cell.renderValue()}</TableCell>
+                        <TableCell key={cell.id}>
+                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        </TableCell>
                       ))}
                     </TableRow>
                     <TableRow>
