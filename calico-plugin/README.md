@@ -1,4 +1,4 @@
-# my-first-plugin
+# calico-plugin
 
 This is the default template README for [Headlamp Plugins](https://github.com/kubernetes-sigs/headlamp).
 
