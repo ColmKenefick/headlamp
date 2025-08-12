@@ -16,8 +16,8 @@
 import { registerRoute, registerSidebarEntry } from '@kinvolk/headlamp-plugin/lib';
 // @ts-ignore
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { CalicoIcon } from './utils/customIcons';
 import FlowsView from './components/FlowsView/index.js';
+import { CalicoIcon } from './utils/customIcons';
 
 const queryClient = new QueryClient();
 
