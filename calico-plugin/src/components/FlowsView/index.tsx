@@ -4,9 +4,24 @@ import { Icon } from '@iconify/react';
 import { useFlows } from '../../api/queries';
 import { LinearProgress } from '@mui/material';
 import { FlowsViewDetails } from '../FlowsVIewDetails';
+import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { useMemo, useState } from 'react';
 
 const FlowsView = () => {
   const { flowsData, flowsError, fetchingFlows, refetchFlows } = useFlows();
+
+  const [selectedNamespace, setSelectedNamespace] = useState('');
+  const namespaces = useMemo(
+    () => Array.from(new Set(flowsData?.items.map(row => row.source_namespace))).filter(Boolean),
+    [flowsData]
+  );
+
+  const filteredData = selectedNamespace
+    ? flowsData?.items.filter(row => row.source_namespace === selectedNamespace)
+    : flowsData?.items;
+
+  console.log(filteredData, namespaces);
+
   return (
     <SectionBox paddingTop={2} marginTop={2}>
       <Paper sx={{ p: 3, mb: 3 }}>
@@ -51,10 +66,27 @@ const FlowsView = () => {
 
       {flowsData && !fetchingFlows && (
         <Box>
+          <FormControl sx={{ minWidth: 200, mb: 2 }}>
+            <InputLabel id="namespace-select-label">Namespace</InputLabel>
+            <Select
+              labelId="namespace-select-label"
+              value={selectedNamespace}
+              label="Namespace"
+              onChange={e => setSelectedNamespace(e.target.value)}
+            >
+              <MenuItem value="">All</MenuItem>
+              {namespaces.map(ns => (
+                <MenuItem key={ns} value={ns}>
+                  {ns}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
           <Typography variant="h6" gutterBottom>
             Flow Data:
           </Typography>
-          <FlowsViewDetails flowsData={flowsData} />
+          <FlowsViewDetails flowsData={filteredData} />
         </Box>
       )}
 
