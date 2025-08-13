@@ -1,9 +1,17 @@
-import { Box, CircularProgress, Typography } from '@mui/material';
+
+import {
+  Box,
+  Grid,
+  Icon,
+  Link,
+  Paper,
+  Typography
+} from '@mui/material';
 // import { Auth0LoginComponent } from '../auth0-login';
-import { Icon } from '@iconify/react';
 import { useEffect, useState } from 'react';
 import { useStats } from '../../api/queries';
 import Auth0Client from '../../utils/auth0-client';
+import CalicoCloudLogin from '../CalicoCloudLogin';
 import PolicyChart from '../PacketsByPolicy';
 
 // Configuration
@@ -60,11 +68,34 @@ const CalicoCloudToken = () => {
 
   return (
     <Box>
-      <h2>Calico Cloud Token</h2>
-      <p>
-        This component demonstrates how to use the Auth0LoginComponent to authenticate with Calico
-        Cloud.
-      </p>
+      <Paper sx={{ p: 3, mb: 3 }}>
+            <Grid container spacing={2} alignItems="center" justifyContent="space-between">
+              
+              <Grid item>
+                <Box display="flex" alignItems="center" gap={2}>
+                  <Icon icon="custom:calico" width={32} height={32} />
+                  <Typography variant="h5" component="h1">
+                    Calico Cloud Observability
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item>
+                <Typography variant="body1">
+                  No Calico Cloud account? <Link href="https://www.dev.calicocloud.io/" target="_blank">Get one for free!</Link>
+                </Typography>
+              </Grid>
+            </Grid>
+          </Paper>
+          <p>This functionality requires you to log in to Calico Cloud.</p>
+          <p>This will give you access to its pwerful API for improved Observability.</p>
+          <Paper sx={{ p: 3, mb: 3 }}>
+            <Grid container spacing={2} alignItems="center" justifyContent="space-between">
+              <Box display="flex" alignItems="center" gap={2}>
+                <CalicoCloudLogin /> 
+              </Box>
+            </Grid>
+          </Paper>
+
       <pre
         style={{
           background: '#f5f5f5',
@@ -76,26 +107,18 @@ const CalicoCloudToken = () => {
           border: '1px solid #ddd',
         }}
       >
-        {token || 'No token available'}
+        {statsData && !fetchingStats ? (
+          <>
+            {' '}
+            {
+              <PolicyChart rawData={statsData} />
+              // JSON.stringify(statsData, null, 2)
+            }
+          </>
+        ) : (
+          'No stats data available'
+        )}
       </pre>
-
-      {statsData && statsData.length > 0 && !fetchingStats ? (
-        <>
-          <Box display="flex" alignItems="center" gap={2} marginTop={4}>
-            <Icon icon="custom:calico" width={64} height={64} />
-            <Typography variant="h5" component="h1">
-              This chart shows the Packets By Policy in your Cluster over the last 15 minutes.
-            </Typography>
-          </Box>
-          <PolicyChart rawData={statsData} />
-        </>
-      ) : statsError === null ? (
-        <Box display="flex" justifyContent="center" alignItems="center" minHeight={100}>
-          <CircularProgress />
-        </Box>
-      ) : (
-        'No stats data available'
-      )}
     </Box>
   );
 };

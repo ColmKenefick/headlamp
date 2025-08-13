@@ -5,17 +5,16 @@ import {
   Box,
   Button,
   CircularProgress,
-  Grid,
+  FormControl, InputLabel,
   LinearProgress,
-  Link,
+  MenuItem,
   Paper,
-  Typography,
+  Select,
+  Typography
 } from '@mui/material';
-import { useFlows } from '../../api/queries';
-import CalicoCloudLogin from '../CalicoCloudLogin';
-import { FlowsViewDetails } from '../FlowsViewDetails';
-import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { useMemo, useState } from 'react';
+import { useFlows } from '../../api/queries';
+import { FlowsViewDetails } from '../FlowsVIewDetails';
 
 const FlowsView = () => {
   const { flowsData, flowsError, fetchingFlows, refetchFlows } = useFlows();
@@ -114,7 +113,7 @@ const FlowsView = () => {
         </Alert>
       )}
 
-      <Paper sx={{ p: 3, mb: 3 }}>
+      {/* <Paper sx={{ p: 3, mb: 3 }}>
         <Grid container spacing={2} alignItems="center" justifyContent="space-between">
           <Grid item>
             <Box display="flex" alignItems="center" gap={2}>
@@ -132,22 +131,7 @@ const FlowsView = () => {
           </Grid>
         </Grid>
         <CalicoCloudLogin />
-        {/* <Grid container spacing={2} alignItems="center" justifyContent="space-between">
-                <Grid item xs={12}>
-                  <Box display="flex" alignItems="center" gap={2}>
-                    <TextField id="standard-basic" label="Email" variant="standard" />
-                    <TextField id="standard-basic" label="Password" variant="standard" />
-                    <Button variant="contained" onClick={() => {
-                        console.log('Logging in...');
-                        setTimeout(() => {
-                          setLoggedIn(true);
-                          console.log('Logged in successfully');
-                        }, 2000);
-                      }} loading={loggingIn.toString()} disabled={loggedIn}>{loggedIn ? 'All set!' : 'Log In'}</Button>
-                  </Box>
-                </Grid>
-              </Grid> */}
-      </Paper>
+      </Paper> */}
     </SectionBox>
   );
 };

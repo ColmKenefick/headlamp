@@ -9,7 +9,6 @@ import {
   Grid,
   IconButton,
   LinearProgress,
-  Link,
   Paper,
   Table,
   TableBody,
@@ -23,7 +22,6 @@ import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-tabl
 import React, { useMemo } from 'react';
 import { useFlows } from '../../api/queries';
 import { FlowLog } from '../../types';
-import CalicoCloudLogin from '../CalicoCloudLogin';
 
 const FlowsViewer = () => {
   const [openRow, setOpenRow] = React.useState<number | null>(null);
@@ -244,7 +242,7 @@ const FlowsViewer = () => {
         </Alert>
       )}
 
-      <Paper sx={{ p: 3, mb: 3 }}>
+      {/* <Paper sx={{ p: 3, mb: 3 }}>
         <Grid container spacing={2} alignItems="center" justifyContent="space-between">
           <Grid item>
             <Box display="flex" alignItems="center" gap={2}>
@@ -275,7 +273,7 @@ const FlowsViewer = () => {
             </Box>
           </Grid>
         </Grid> */}
-      </Paper>
+      {/* </Paper> */} 
     </SectionBox>
   );
 };
