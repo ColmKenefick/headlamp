@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { registerSidebarEntry, registerRoute } from '@kinvolk/headlamp-plugin/lib';
-import { CalicoIcon } from './utils/customIcons';
+import { registerRoute, registerSidebarEntry } from '@kinvolk/headlamp-plugin/lib';
+// @ts-ignore
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { CalicoIcon } from './utils/customIcons';
 import FlowsView from './components/FlowsView/index.js';
 
 const queryClient = new QueryClient();

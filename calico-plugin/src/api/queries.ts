@@ -7,7 +7,14 @@ export const useFlows = () => {
     staleTime: 0,
     queryFn: async () => {
       await new Promise(resolve => setTimeout(resolve, 500)); // 0.5s delay
-      return fetch('http://localhost:3002/flows').then(res => res.json());
+      // Use the external proxy to fetch flows from the backend
+      return fetch('http://127.0.0.1:4466/externalproxy', {
+        method: 'GET',
+        headers: {
+          'Forward-to': 'http://localhost:3002/whisker-backend/flows',
+          'Accept': 'application/json',
+        },
+      }).then(res => res.json());
     },
   });
 

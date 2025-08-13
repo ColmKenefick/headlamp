@@ -42,6 +42,8 @@ spec:
               value: "headlamp"
             - name: HEADLAMP_CONFIG_SERVICE_VERSION
               value: "latest"
+            - name: HEADLAMP_CONFIG_PROXY_URLS
+              value: "http://whisker.calico-system.svc.cluster.local:8081/*"
           ports:
             - containerPort: 4466
               name: http
