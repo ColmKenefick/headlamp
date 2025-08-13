@@ -13,22 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { registerSidebarEntry, registerRoute, registerPlugin } from '@kinvolk/headlamp-plugin/lib';
-// @ts-ignore
-import { CalicoIcon } from './utils/customIcons.tsx';
+import { registerSidebarEntry, registerRoute } from '@kinvolk/headlamp-plugin/lib';
+import { CalicoIcon } from './utils/customIcons';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import FlowsViewer from './components/FlowsViewer/index.js';
+import FlowsView from './components/FlowsView/index.js';
 
 const queryClient = new QueryClient();
-
-function CalicoPage() {
-  return <FlowsViewer />;
-}
 
 export default function CalicoRoot() {
   return (
     <QueryClientProvider client={queryClient}>
-      <CalicoPage />
+      <FlowsView />
     </QueryClientProvider>
   );
 }

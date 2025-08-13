@@ -1,7 +1,6 @@
 import { addIcon } from '@iconify/react';
 
 // Source: https://github.com/projectcalico/calico/blob/master/whisker/src/icons/CalicoCatIcon.tsx
-// Register the icon with iconify
 addIcon('custom:calico', {
   body: `
      <path
