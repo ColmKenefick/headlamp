@@ -1,9 +1,19 @@
 import { Icon } from '@iconify/react';
 import { SectionBox } from '@kinvolk/headlamp-plugin/lib/CommonComponents';
-import { Alert, Box, Button, CircularProgress, Grid, LinearProgress, Link, Paper, Typography } from '@mui/material';
+import {
+  Alert,
+  Box,
+  Button,
+  CircularProgress,
+  Grid,
+  LinearProgress,
+  Link,
+  Paper,
+  Typography,
+} from '@mui/material';
 import { useFlows } from '../../api/queries';
 import CalicoCloudLogin from '../CalicoCloudLogin';
-import { FlowsViewDetails } from '../FlowsVIewDetails';
+import { FlowsViewDetails } from '../FlowsViewDetails';
 import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { useMemo, useState } from 'react';
 
@@ -105,22 +115,24 @@ const FlowsView = () => {
       )}
 
       <Paper sx={{ p: 3, mb: 3 }}>
-              <Grid container spacing={2} alignItems="center" justifyContent="space-between">
-                <Grid item>
-                  <Box display="flex" alignItems="center" gap={2}>
-                    <Icon icon="custom:calico" width={32} height={32} />
-                    <Typography variant="h5" component="h1">
-                      More insights with Calico Cloud
-                    </Typography>
-                    <Typography variant="body1">
-                      No Calico Cloud account? <Link href="https://www.dev.calicocloud.io/" target="_blank">Get one for free!</Link>
-                    </Typography>
-        
-                  </Box>
-                </Grid>
-              </Grid>
-              <CalicoCloudLogin />
-              {/* <Grid container spacing={2} alignItems="center" justifyContent="space-between">
+        <Grid container spacing={2} alignItems="center" justifyContent="space-between">
+          <Grid item>
+            <Box display="flex" alignItems="center" gap={2}>
+              <Icon icon="custom:calico" width={32} height={32} />
+              <Typography variant="h5" component="h1">
+                More insights with Calico Cloud
+              </Typography>
+              <Typography variant="body1">
+                No Calico Cloud account?{' '}
+                <Link href="https://www.dev.calicocloud.io/" target="_blank">
+                  Get one for free!
+                </Link>
+              </Typography>
+            </Box>
+          </Grid>
+        </Grid>
+        <CalicoCloudLogin />
+        {/* <Grid container spacing={2} alignItems="center" justifyContent="space-between">
                 <Grid item xs={12}>
                   <Box display="flex" alignItems="center" gap={2}>
                     <TextField id="standard-basic" label="Email" variant="standard" />
@@ -135,7 +147,7 @@ const FlowsView = () => {
                   </Box>
                 </Grid>
               </Grid> */}
-            </Paper>
+      </Paper>
     </SectionBox>
   );
 };
