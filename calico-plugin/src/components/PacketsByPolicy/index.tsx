@@ -9,6 +9,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from 'recharts';
+import Box from '@mui/material/Box';
 
 // Custom tooltip as ES6 arrow function
 const CustomTooltip = ({ active, payload }) => {
@@ -42,7 +43,7 @@ const PolicyChart = ({ rawData }) => {
   );
 
   return (
-    <div style={{ background: '#fff', padding: 16 }}>
+    <Box style={{ background: '#fff', padding: 16 }}>
       <ResponsiveContainer width="100%" height={400}>
         <BarChart
           data={chartData}
@@ -63,7 +64,7 @@ const PolicyChart = ({ rawData }) => {
           <Bar dataKey="allowed" stackId="a" fill="#5cb85c" />
         </BarChart>
       </ResponsiveContainer>
-    </div>
+    </Box>
   );
 };
 

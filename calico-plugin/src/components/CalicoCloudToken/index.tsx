@@ -1,5 +1,6 @@
-import { Box } from '@mui/material';
+import { Box, CircularProgress, Typography } from '@mui/material';
 // import { Auth0LoginComponent } from '../auth0-login';
+import { Icon } from '@iconify/react';
 import { useEffect, useState } from 'react';
 import { useStats } from '../../api/queries';
 import Auth0Client from '../../utils/auth0-client';
@@ -77,29 +78,24 @@ const CalicoCloudToken = () => {
       >
         {token || 'No token available'}
       </pre>
-      <pre
-        style={{
-          background: '#f5f5f5',
-          padding: '16px',
-          borderRadius: '4px',
-          overflow: 'auto',
-          maxHeight: '600px',
-          fontSize: '12px',
-          border: '1px solid #ddd',
-        }}
-      >
-        {statsData && !fetchingStats ? (
-          <>
-            {' '}
-            {
-              <PolicyChart rawData={statsData} />
-              // JSON.stringify(statsData, null, 2)
-            }
-          </>
-        ) : (
-          'No stats data available'
-        )}
-      </pre>
+
+      {statsData && statsData.length > 0 && !fetchingStats ? (
+        <>
+          <Box display="flex" alignItems="center" gap={2} marginTop={4}>
+            <Icon icon="custom:calico" width={64} height={64} />
+            <Typography variant="h5" component="h1">
+              This chart shows the Packets By Policy in your Cluster over the last 15 minutes.
+            </Typography>
+          </Box>
+          <PolicyChart rawData={statsData} />
+        </>
+      ) : statsError === null ? (
+        <Box display="flex" justifyContent="center" alignItems="center" minHeight={100}>
+          <CircularProgress />
+        </Box>
+      ) : (
+        'No stats data available'
+      )}
     </Box>
   );
 };
