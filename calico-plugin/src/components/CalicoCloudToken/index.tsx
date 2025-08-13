@@ -3,19 +3,15 @@ import {
 } from '@mui/material';
 // import { Auth0LoginComponent } from '../auth0-login';
 import { useEffect, useState } from 'react';
-import Auth0Client from '../../utils/auth0-client.js';
+import { useStats } from '../../api/queries';
+import Auth0Client from '../../utils/auth0-client';
 
 // Configuration
 const AUTH_CONFIG = {
-    // tokenUrl: 'http://127.0.0.1:5555/oauth/token',
     tokenUrl: 'https://auth.dev.calicocloud.io/oauth/token',
     clientId: 'OA3MPiof9wwX72xpyQ8IgyEfOe1qNUDg',
     audience: 'default',
     scope: 'openid profile email offline_access',
-    
-    // // Hardcoded test credentials
-    // username: 'antony+hackathon2025@tigera.io',
-    // password: 'SGbAspBLAXq7cCf',
     
     // Token refresh settings
     refreshBufferMinutes: 5,
@@ -31,18 +27,34 @@ const CalicoCloudToken = () => {
   
   const [token, setToken] = useState(null);
 
+  const [data, setData] = useState("Nothing yet");
+
   authClient.setCallbacks({ onTokenUpdate: () => {
     console.log('Token updated:', authClient.getCurrentToken());
     setToken(authClient.getCurrentToken());
   } });
 
+  const { statsData, statsError, fetchingStats, refetchStats } = useStats(token);
+  console.log(statsData, statsError, fetchingStats);
+
   useEffect(() => {
     authClient.login(email, password)
+      .then((data) => {
+        // https://p95znudz-multi-09-management.dev.calicocloud.io/tigera-elasticsearch/flows/statistics?type=PacketCount&groupBy=Policy&startTimeGt=-900&startTimeLt=-0
+        const tenantID = data?.decodedToken['https://calicocloud.io/tenantID'];
+        console.log('Login successful', data, tenantID);
+      })
       .catch(error => {
         console.error('Login failed:', error);
       });
   }, []);
   
+  useEffect(() => {
+    if (token) {
+      setData("Fake data...");
+      refetchStats();
+    }
+  }, [token]);
 
   return (
         <Box>
@@ -61,6 +73,19 @@ const CalicoCloudToken = () => {
             }}
           >
             {token || 'No token available'}
+          </pre>
+          <pre
+            style={{
+              background: '#f5f5f5',
+              padding: '16px',
+              borderRadius: '4px',
+              overflow: 'auto',
+              maxHeight: '600px',
+              fontSize: '12px',
+              border: '1px solid #ddd',
+            }}
+          >
+            {(statsData && !fetchingStats) ? JSON.stringify(statsData, null, 2) : 'No stats data available'}
           </pre>
         </Box>
   );

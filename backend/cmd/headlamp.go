@@ -507,10 +507,27 @@ func createHeadlampHandler(config *HeadlampConfig) http.Handler {
 
 	config.handleClusterRequests(r)
 
+	// Handle OPTIONS requests specifically for CORS
 	r.HandleFunc("/externalproxy", func(w http.ResponseWriter, r *http.Request) {
+		// Set CORS headers for all requests
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "X-HEADLAMP_BACKEND-TOKEN, X-Requested-With, Content-Type, Authorization, authorization, Forward-To, forward-to, KUBECONFIG, X-HEADLAMP-USER-ID, X-Cluster-Id, accept, Accept")
+		w.Header().Set("Access-Control-Allow-Credentials", "true")
+
+		// Handle CORS preflight requests
+		if r.Method == "OPTIONS" {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
 		proxyURL := r.Header.Get("proxy-to")
 		if proxyURL == "" && r.Header.Get("Forward-to") != "" {
 			proxyURL = r.Header.Get("Forward-to")
+		}
+		// Also check query parameter for target URL (to avoid CORS preflight)
+		if proxyURL == "" && r.URL.Query().Get("target") != "" {
+			proxyURL = r.URL.Query().Get("target")
 		}
 
 		if proxyURL == "" {
@@ -561,6 +578,15 @@ func createHeadlampHandler(config *HeadlampConfig) http.Handler {
 		proxyReq.Header = make(http.Header)
 		for h, val := range r.Header {
 			proxyReq.Header[h] = val
+		}
+
+		// Add X-Cluster-Id from query parameter if provided (to avoid CORS preflight)
+		if clusterId := r.URL.Query().Get("clusterId"); clusterId != "" {
+			// proxyReq.Header.Set("X-Cluster-Id", clusterId)
+			logger.Log(logger.LevelError, nil, err, "setting cluster ID "+clusterId)
+			proxyReq.Header.Set("X-Cluster-Id", clusterId)
+		} else {
+			logger.Log(logger.LevelError, nil, err, "cluster ID not provided")
 		}
 
 		// Disable caching
@@ -616,6 +642,15 @@ func createHeadlampHandler(config *HeadlampConfig) http.Handler {
 
 		defer resp.Body.Close()
 	})
+
+	// Explicit OPTIONS handler for /externalproxy CORS preflight
+	r.HandleFunc("/externalproxy", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "X-HEADLAMP_BACKEND-TOKEN, X-Requested-With, Content-Type, Authorization, authorization, Forward-To, forward-to, KUBECONFIG, X-HEADLAMP-USER-ID, X-Cluster-Id, accept, Accept")
+		w.Header().Set("Access-Control-Allow-Credentials", "true")
+		w.WriteHeader(http.StatusOK)
+	}).Methods("OPTIONS")
 
 	// Configuration
 	r.HandleFunc("/config", config.getConfig).Methods("GET")
@@ -814,7 +849,7 @@ func createHeadlampHandler(config *HeadlampConfig) http.Handler {
 		headers := handlers.AllowedHeaders([]string{
 			"X-HEADLAMP_BACKEND-TOKEN", "X-Requested-With", "Content-Type",
 			"Authorization", "Forward-To",
-			"KUBECONFIG", "X-HEADLAMP-USER-ID",
+			"KUBECONFIG", "X-HEADLAMP-USER-ID", "X-Cluster-Id",
 		})
 		methods := handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD", "DELETE", "PATCH", "OPTIONS"})
 

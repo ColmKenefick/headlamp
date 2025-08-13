@@ -33,3 +33,22 @@ export type FlowLog = {
     pending: Policy[];
   };
 };
+
+export type FlowStats = {
+  policy: {
+    kind: string;
+    namespace: string;
+    name: string;
+    // Don't care about the rest for now...
+  };
+  groupBy: string;
+  type: string;
+  direction: string;
+  allowedIn: number[];
+  allowedOut: number[];
+  deniedIn: number[];
+  deniedOut: number[];
+  passedIn: number[];
+  passedOut: number[];
+};
+
