@@ -7,8 +7,8 @@ import Auth0Client from '../../utils/auth0-client.js';
 
 // Configuration
 const AUTH_CONFIG = {
-    tokenUrl: 'http://127.0.0.1:5555/oauth/token',
-    // tokenUrl: 'https://auth.dev.calicocloud.io/oauth/token',
+    // tokenUrl: 'http://127.0.0.1:5555/oauth/token',
+    tokenUrl: 'https://auth.dev.calicocloud.io/oauth/token',
     clientId: 'OA3MPiof9wwX72xpyQ8IgyEfOe1qNUDg',
     audience: 'default',
     scope: 'openid profile email offline_access',

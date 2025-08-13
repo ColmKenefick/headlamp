@@ -73,7 +73,7 @@ export default function CalicoRoot() {
     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
       <Tabs value={tab} onChange={handleChange} aria-label="basic tabs example">
         <Tab label="Calico Flows" {...a11yProps(0)} />
-        <Tab label="Calico Policies Stats" {...a11yProps(1)} />
+        <Tab label="Calico Policies" {...a11yProps(1)} />
       </Tabs>
     </Box>
     <CustomTabPanel value={tab} index={0}>

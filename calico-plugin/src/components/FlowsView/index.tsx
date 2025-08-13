@@ -1,8 +1,8 @@
-import { SectionBox } from '@kinvolk/headlamp-plugin/lib/CommonComponents';
-import { Button, CircularProgress, Alert, Box, Grid, Paper, Typography } from '@mui/material';
 import { Icon } from '@iconify/react';
+import { SectionBox } from '@kinvolk/headlamp-plugin/lib/CommonComponents';
+import { Alert, Box, Button, CircularProgress, Grid, LinearProgress, Link, Paper, Typography } from '@mui/material';
 import { useFlows } from '../../api/queries';
-import { LinearProgress } from '@mui/material';
+import CalicoCloudLogin from '../CalicoCloudLogin';
 import { FlowsViewDetails } from '../FlowsVIewDetails';
 
 const FlowsView = () => {
@@ -71,6 +71,39 @@ const FlowsView = () => {
           3. Click "Refresh Flows" to retrieve flow data
         </Alert>
       )}
+
+      <Paper sx={{ p: 3, mb: 3 }}>
+              <Grid container spacing={2} alignItems="center" justifyContent="space-between">
+                <Grid item>
+                  <Box display="flex" alignItems="center" gap={2}>
+                    <Icon icon="custom:calico" width={32} height={32} />
+                    <Typography variant="h5" component="h1">
+                      More insights with Calico Cloud
+                    </Typography>
+                    <Typography variant="body1">
+                      No Calico Cloud account? <Link href="https://www.dev.calicocloud.io/" target="_blank">Get one for free!</Link>
+                    </Typography>
+        
+                  </Box>
+                </Grid>
+              </Grid>
+              <CalicoCloudLogin />
+              {/* <Grid container spacing={2} alignItems="center" justifyContent="space-between">
+                <Grid item xs={12}>
+                  <Box display="flex" alignItems="center" gap={2}>
+                    <TextField id="standard-basic" label="Email" variant="standard" />
+                    <TextField id="standard-basic" label="Password" variant="standard" />
+                    <Button variant="contained" onClick={() => {
+                        console.log('Logging in...');
+                        setTimeout(() => {
+                          setLoggedIn(true);
+                          console.log('Logged in successfully');
+                        }, 2000);
+                      }} loading={loggingIn.toString()} disabled={loggedIn}>{loggedIn ? 'All set!' : 'Log In'}</Button>
+                  </Box>
+                </Grid>
+              </Grid> */}
+            </Paper>
     </SectionBox>
   );
 };
