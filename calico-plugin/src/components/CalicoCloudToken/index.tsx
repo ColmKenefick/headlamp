@@ -1,11 +1,10 @@
-import { Box, Grid, Link, Paper, Typography, CircularProgress } from '@mui/material';
+import { Box, Button, Grid, Link, Paper, TextField, Typography } from '@mui/material';
 // import { Auth0LoginComponent } from '../auth0-login';
+import { Icon } from '@iconify/react';
 import { useEffect, useState } from 'react';
 import { useStats } from '../../api/queries';
 import Auth0Client from '../../utils/auth0-client';
-import CalicoCloudLogin from '../CalicoCloudLogin';
 import PolicyChart from '../PacketsByPolicy';
-import { Icon } from '@iconify/react';
 
 // Configuration
 const AUTH_CONFIG = {
@@ -25,6 +24,9 @@ const CalicoCloudToken = () => {
   const email = 'antony+hackathon2025@tigera.io';
   const password = 'SGbAspBLAXq7cCf';
 
+  const [loggedIn, setLoggedIn] = useState<boolean>(false);
+  const [loggingIn, setLoggingIn] = useState<boolean>(false);
+
   const [token, setToken] = useState(null);
 
   const [data, setData] = useState('Nothing yet');
@@ -39,18 +41,18 @@ const CalicoCloudToken = () => {
   const { statsData, statsError, fetchingStats, refetchStats } = useStats(token);
   console.log(statsData, statsError, fetchingStats);
 
-  useEffect(() => {
-    authClient
-      .login(email, password)
-      .then(data => {
-        // https://p95znudz-multi-09-management.dev.calicocloud.io/tigera-elasticsearch/flows/statistics?type=PacketCount&groupBy=Policy&startTimeGt=-900&startTimeLt=-0
-        const tenantID = data?.decodedToken['https://calicocloud.io/tenantID'];
-        console.log('Login successful', data, tenantID);
-      })
-      .catch(error => {
-        console.error('Login failed:', error);
-      });
-  }, []);
+  // useEffect(() => {
+  //   authClient
+  //     .login(email, password)
+  //     .then(data => {
+  //       // https://p95znudz-multi-09-management.dev.calicocloud.io/tigera-elasticsearch/flows/statistics?type=PacketCount&groupBy=Policy&startTimeGt=-900&startTimeLt=-0
+  //       const tenantID = data?.decodedToken['https://calicocloud.io/tenantID'];
+  //       console.log('Login successful', data, tenantID);
+  //     })
+  //     .catch(error => {
+  //       console.error('Login failed:', error);
+  //     });
+  // }, []);
 
   useEffect(() => {
     if (token) {
@@ -82,16 +84,44 @@ const CalicoCloudToken = () => {
         </Grid>
       </Paper>
       <p>This functionality requires you to log in to Calico Cloud.</p>
-      <p>This will give you access to its pwerful API for improved Observability.</p>
+      <p>This will give you access to its pwerful API for improved Observability <i>(for the demo, use {email} and {password})</i>.</p>
       <Paper sx={{ p: 3, mb: 3 }}>
-        <Grid container spacing={2} alignItems="center" justifyContent="space-between">
-          <Box display="flex" alignItems="center" gap={2}>
-            <CalicoCloudLogin />
-          </Box>
-        </Grid>
-      </Paper>
+            <Grid container spacing={2} alignItems="center" justifyContent="space-between">
+              <Box display="flex" alignItems="center" gap={2}>
+                {/* <CalicoCloudLogin />  */}
+                <Grid container spacing={2} alignItems="center" justifyContent="space-between">
+                  <Grid item xs={12}>
+                    <Box display="flex" alignItems="center" gap={2}>
+                      <TextField id="standard-basic" label="Email" variant="standard" />
+                      <TextField id="standard-basic" label="Password" variant="standard" />
+                      <Button variant="contained" onClick={() => {
+                          console.log('...');
 
-      {statsData && statsData.length > 0 && !fetchingStats ? (
+                          authClient.login(email, password)
+                          .then(data => {
+                            // https://p95znudz-multi-09-management.dev.calicocloud.io/tigera-elasticsearch/flows/statistics?type=PacketCount&groupBy=Policy&startTimeGt=-900&startTimeLt=-0
+                            const tenantID = data?.decodedToken['https://calicocloud.io/tenantID'];
+                            setLoggedIn(true);
+                            console.log('Login successful', data, tenantID);
+                          })
+                          .catch(error => {
+                            console.error('Login failed:', error);
+                          });
+
+                          // setTimeout(() => {
+
+                          //   setLoggedIn(true);
+                          //   console.log('Logged in successfully');
+                          // }, 2000);
+                        }} loading={loggingIn} disabled={loggedIn}>{loggedIn ? 'All set!' : 'Log In'}</Button>
+                    </Box>
+                  </Grid>
+                </Grid>
+              </Box>
+            </Grid>
+          </Paper>
+    
+      {loggedIn && statsData && statsData.length > 0 && !fetchingStats && (
         <>
           <Box display="flex" alignItems="center" gap={2} marginTop={4}>
             <Icon icon="custom:calico" width={64} height={64} />
@@ -101,12 +131,12 @@ const CalicoCloudToken = () => {
           </Box>
           <PolicyChart rawData={statsData} />
         </>
-      ) : statsError === null ? (
-        <Box display="flex" justifyContent="center" alignItems="center" minHeight={100}>
-          <CircularProgress />
-        </Box>
-      ) : (
-        'No stats data available'
+      // ) : statsError === null ? (
+      //   <Box display="flex" justifyContent="center" alignItems="center" minHeight={100}>
+      //     <CircularProgress />
+      //   </Box>
+      // ) : (
+      //   'No stats data available'
       )}
     </Box>
   );
