@@ -37,6 +37,7 @@
     "@kinvolk/headlamp-plugin": "^0.12.0"
   },
   "dependencies": {
-    "@tanstack/react-table": "^8.21.3"
+    "@tanstack/react-table": "^8.21.3",
+    "jwt-decode": "^4.0.0"
   }
 }

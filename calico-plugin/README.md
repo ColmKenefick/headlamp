@@ -9,11 +9,13 @@ This is the default template README for [Headlamp Plugins](https://github.com/ku
 
 Port forward whisker API:
 ```
+export KUBECONFIG=/home/antony/banzai/calico-hackathlon/.local/kubeconfig
 kubectl port-forward -n calico-system svc/whisker 3002:8081
 ```
 
 **Make sure to start the backend with correct proxy URLs**:
 ```
+export KUBECONFIG=/home/antony/banzai/calico-hackathlon/.local/kubeconfig
 HEADLAMP_CONFIG_PROXY_URLS="http://localhost:3002/*" make run-backend
 ```
 
@@ -22,6 +24,11 @@ Run the dev frontend:
 make run-frontend
 ```
 
+Run plugin in dev mode:
+```
+cd calico-plugin
+npm start
+```
 
 ## Developing Headlamp plugins
 
