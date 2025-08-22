@@ -21,8 +21,8 @@ const AUTH_CONFIG = {
 
 const authClient = new Auth0Client(AUTH_CONFIG);
 const CalicoCloudToken = () => {
-  const email = 'antony+hackathon2025@tigera.io';
-  const password = 'SGbAspBLAXq7cCf';
+  const email = 'colm.kenefick+00free44@tigera.io';
+  const password = '3k#2PAUs%A3UVS';
 
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [loggingIn, setLoggingIn] = useState<boolean>(false);
