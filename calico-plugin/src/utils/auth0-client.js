@@ -21,7 +21,7 @@ const getFetch = async () => {
 export class Auth0Client {
     constructor(config) {
         this.config = {
-            tokenUrl: 'https://auth.dev.calicocloud.io/oauth/token',
+            tokenUrl: 'http://127.0.0.1:5555/oauth/token', //'https://auth.dev.calicocloud.io/oauth/token',
             clientId: 'OA3MPiof9wwX72xpyQ8IgyEfOe1qNUDg',
             audience: 'default',
             scope: 'openid profile email offline_access',
